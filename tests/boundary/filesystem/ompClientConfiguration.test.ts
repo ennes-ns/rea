@@ -138,6 +138,31 @@ describe("OMP disabledServers denylist", () => {
         await readClientRegistrationStatuses(home, entry, { environment: {} })
       ).find(({ client: name }) => name === "omp");
     expect(await status()).toMatchObject({ state: "stale" });
+    // The enabledServers allowlist forces an `enabled: false` entry on, but
+    // the disabledServers denylist still wins over it.
+    const disabledEntry = { ...registration, enabled: false };
+    await writeFile(
+      client.configPath,
+      JSON.stringify({ mcpServers: { rea: disabledEntry } }),
+    );
+    expect(await status()).toMatchObject({ state: "stale" });
+    await writeFile(
+      client.configPath,
+      JSON.stringify({
+        mcpServers: { rea: disabledEntry },
+        enabledServers: ["rea"],
+      }),
+    );
+    expect(await status()).toMatchObject({ state: "aligned" });
+    await writeFile(
+      client.configPath,
+      JSON.stringify({
+        mcpServers: { rea: disabledEntry },
+        enabledServers: ["rea"],
+        disabledServers: ["rea"],
+      }),
+    );
+    expect(await status()).toMatchObject({ state: "stale" });
     // OMP infers stdio for a command entry without an explicit type.
     await writeFile(
       client.configPath,

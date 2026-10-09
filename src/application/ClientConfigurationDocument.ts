@@ -1052,6 +1052,22 @@ export const ompServerListedDisabled = (
   return Array.isArray(listed) && listed.includes(serverKey);
 };
 
+/** OMP's user `enabledServers` allowlist overrides an entry's `enabled: false`. */
+const OMP_ENABLED_SERVERS_KEY = "enabledServers";
+
+/**
+ * Whether OMP's allowlist forces `serverKey` on despite its entry's
+ * `enabled: false`. The `disabledServers` denylist still wins over it.
+ */
+export const clientServerForcedEnabled = (
+  parsed: ClientConfigurationDocument,
+  serverKey: string,
+): boolean => {
+  if (parsed.dialect !== "omp") return false;
+  const listed = parsed.document[OMP_ENABLED_SERVERS_KEY];
+  return Array.isArray(listed) && listed.includes(serverKey);
+};
+
 /** Whether a client's own disable list suppresses `serverKey`. */
 export const clientServerListedDisabled = (
   parsed: ClientConfigurationDocument,

@@ -1,4 +1,5 @@
 import {
+  clientServerForcedEnabled,
   clientServerListedDisabled,
   effectiveClientServer,
   parseClientConfiguration,
@@ -136,6 +137,7 @@ export const readClientRegistrationStatuses = async (
             client,
             currentCommandPath,
             options.platform ?? process.platform,
+            clientServerForcedEnabled(parsed, PRODUCT_IDENTITY.mcpServerKey),
           ) &&
             !clientServerListedDisabled(parsed, PRODUCT_IDENTITY.mcpServerKey)
             ? "aligned"
@@ -162,9 +164,13 @@ const registrationAligned = (
   client: SetupClient,
   currentCommandPath: string,
   platform: NodeJS.Platform,
+  forcedEnabled = false,
 ): boolean => {
   const command = [registration.command, ...registration.args];
-  if (registration.disabled === true || registration.enabled === false)
+  if (
+    registration.disabled === true ||
+    (registration.enabled === false && !forcedEnabled)
+  )
     return false;
   if (!isOwnedClientRegistrationCommand(command, currentCommandPath))
     return false;

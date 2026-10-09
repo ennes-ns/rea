@@ -144,7 +144,9 @@ For OMP, setup writes a `type: "stdio"` entry to the user-level
 `PI_CODING_AGENT_DIR`, and the profile selected by `OMP_PROFILE` or
 `PI_PROFILE` (`~/.omp/profiles/<name>/agent/mcp.json`). Setup also removes
 `rea` from that file's `disabledServers` list, which would otherwise hide the
-registration. Run setup under each profile that should load REA.
+registration. Doctor treats an `enabled: false` entry as active when
+`enabledServers` lists `rea`, as OMP does, unless `disabledServers` also lists
+it. Run setup under each profile that should load REA.
 
 For OpenCode, setup writes the V1 `mcp.rea` entry, which OpenCode V1 and V2
 both load. If the configuration already uses OpenCode V2's native
