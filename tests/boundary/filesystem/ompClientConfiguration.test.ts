@@ -10,6 +10,7 @@ import { supportedClients } from "../../../src/application/SupportedClients.js";
 import { systemUninstallHost } from "../../../src/application/Uninstall.js";
 import { PRODUCT_IDENTITY } from "../../../src/identity.js";
 import { createTestTempDirectory } from "../../fixtures/temporaryDirectory.js";
+import { clearClientLocationEnvironment } from "../../fixtures/clientEnvironment.js";
 
 const command = [
   "npx",
@@ -18,15 +19,7 @@ const command = [
   "mcp",
 ] as const;
 
-beforeEach(() => {
-  for (const name of [
-    "OMP_PROFILE",
-    "PI_CODING_AGENT_DIR",
-    "PI_CONFIG_DIR",
-    "PI_PROFILE",
-  ])
-    vi.stubEnv(name, undefined);
-});
+beforeEach(clearClientLocationEnvironment);
 afterEach(() => vi.unstubAllEnvs());
 
 const ompPath = (env: Parameters<typeof supportedClients>[2]) =>

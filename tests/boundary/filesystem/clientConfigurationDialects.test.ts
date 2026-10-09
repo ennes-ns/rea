@@ -11,6 +11,7 @@ import { supportedClients } from "../../../src/application/SupportedClients.js";
 import { PRODUCT_IDENTITY } from "../../../src/identity.js";
 import { isOwnedClientRegistrationCommand } from "../../../src/application/ClientRegistrationIdentity.js";
 import { createTestTempDirectory } from "../../fixtures/temporaryDirectory.js";
+import { clearClientLocationEnvironment } from "../../fixtures/clientEnvironment.js";
 
 const command = [
   "npx",
@@ -19,23 +20,7 @@ const command = [
   "mcp",
 ] as const;
 
-beforeEach(() => {
-  for (const name of [
-    "APPDATA",
-    "CLAUDE_CONFIG_DIR",
-    "CODEX_HOME",
-    "COPILOT_HOME",
-    "GROK_HOME",
-    "OMP_PROFILE",
-    "OPENCODE_CONFIG",
-    "PI_CODING_AGENT_DIR",
-    "PI_CONFIG_DIR",
-    "PI_PROFILE",
-    "SAND_DATA_ROOT",
-    "XDG_CONFIG_HOME",
-  ])
-    vi.stubEnv(name, undefined);
-});
+beforeEach(clearClientLocationEnvironment);
 
 afterEach(() => vi.unstubAllEnvs());
 
