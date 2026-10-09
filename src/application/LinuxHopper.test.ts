@@ -60,6 +60,7 @@ describe("Linux Hopper host classification", () => {
     ["ID=fedora\nVERSION_ID=41\n", "rpm"],
     ["ID=arch\n", "arch"],
     ["ID=cachyos\nID_LIKE=arch\n", "arch"],
+    ["ID=omarchy\nID_LIKE=arch\n", "arch"],
   ] as const)("accepts an official Hopper distribution", (document, family) => {
     expect(parseLinuxDistribution(document)).toMatchObject({
       packageFamily: family,
