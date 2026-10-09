@@ -1,0 +1,4 @@
+#!/bin/bash
+# REA-CLI uit de eigen fork (zie ~/Work/repos/rea/FORK.md)
+export GHIDRA_INSTALL_DIR="${GHIDRA_INSTALL_DIR:-/opt/ghidra}" JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/java-21-openjdk}"
+exec node "$HOME/Work/repos/rea/scripts/rea.mjs" "$@"

@@ -1,0 +1,27 @@
+#!/bin/bash
+# Werk de eigen REA-fork bij: upstream mergen, bouwen, testen, pushen naar ennes-ns/rea.
+# Zie ~/Work/repos/rea/FORK.md. Nooit PR's naar upstream (morluto/rea).
+set -euo pipefail
+REPO="$HOME/Work/repos/rea"
+export GHIDRA_INSTALL_DIR=/opt/ghidra JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+cd "$REPO"
+
+[[ -z "$(git status --porcelain)" ]] || { echo "Werkboom niet schoon; commit of stash eerst." >&2; exit 1; }
+git checkout -q main
+before="$(git rev-parse --short HEAD)"
+git fetch -q upstream
+if ! git merge --no-edit upstream/main; then
+  echo "Merge-conflict met upstream. Los op in $REPO (eigen patches: zie FORK.md), commit, en draai rea-update opnieuw." >&2
+  exit 1
+fi
+
+npm ci --no-audit --no-fund
+npm run build
+npx vitest run src/application/LinuxHopper.test.ts src/application/Doctor.test.ts src/application/Setup.recovery.test.ts
+
+# Controle: Omarchy-patch nog actief en Ghidra gezond
+node scripts/rea.mjs doctor --provider ghidra --json | grep -q unsupported_host \
+  && { echo "Omarchy-patch werkt niet meer (unsupported_host). Zie FORK.md." >&2; exit 1; }
+
+git push -q origin main
+echo "REA bijgewerkt: $before -> $(git rev-parse --short HEAD). Herstart Claude Code om de nieuwe MCP-server te laden."
