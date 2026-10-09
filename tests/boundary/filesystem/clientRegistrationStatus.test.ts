@@ -15,7 +15,11 @@ beforeEach(() => {
     "CODEX_HOME",
     "COPILOT_HOME",
     "GROK_HOME",
+    "OMP_PROFILE",
     "OPENCODE_CONFIG",
+    "PI_CODING_AGENT_DIR",
+    "PI_CONFIG_DIR",
+    "PI_PROFILE",
     "SAND_DATA_ROOT",
     "XDG_CONFIG_HOME",
   ])

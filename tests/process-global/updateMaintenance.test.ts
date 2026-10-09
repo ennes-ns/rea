@@ -31,6 +31,10 @@ beforeEach(async () => {
     SAND_DATA_ROOT: join(home, ".grokbot"),
     XDG_CONFIG_HOME: join(home, ".config"),
     OPENCODE_CONFIG: join(home, ".config", "opencode", "opencode.jsonc"),
+    OMP_PROFILE: undefined,
+    PI_CODING_AGENT_DIR: undefined,
+    PI_CONFIG_DIR: undefined,
+    PI_PROFILE: undefined,
   }))
     vi.stubEnv(name, value);
 });

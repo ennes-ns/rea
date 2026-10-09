@@ -26,7 +26,11 @@ beforeEach(() => {
     "CODEX_HOME",
     "COPILOT_HOME",
     "GROK_HOME",
+    "OMP_PROFILE",
     "OPENCODE_CONFIG",
+    "PI_CODING_AGENT_DIR",
+    "PI_CONFIG_DIR",
+    "PI_PROFILE",
     "SAND_DATA_ROOT",
     "XDG_CONFIG_HOME",
   ])
@@ -44,6 +48,7 @@ const getClients = (home: string) =>
       "commandcode",
       "vscode",
       "devin",
+      "omp",
     ].includes(name),
   );
 
@@ -55,6 +60,7 @@ describe("additional client configuration dialects", () => {
     "commandcode",
     "vscode",
     "devin",
+    "omp",
   ] as const)("registers, reads back, and uninstalls %s", async (name) => {
     const home = await createTestTempDirectory("rea-client-dialect-");
     const client = getClients(home).find(
@@ -89,7 +95,7 @@ describe("additional client configuration dialects", () => {
         command,
         enabled: true,
       });
-    if (name === "vscode")
+    if (name === "vscode" || name === "omp")
       expect(registration).toMatchObject({
         type: "stdio",
         command: "npx",
